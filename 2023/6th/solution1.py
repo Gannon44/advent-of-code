@@ -1,35 +1,36 @@
 import re
+import numpy as np
+from math import ceil
 
 
 def part1():
-    with open("test12.txt") as file_in:
+    with open("in.txt") as file_in:
         arr = file_in.read().splitlines()
+    races = list(zip(map(int, re.findall("\d+", arr[0].strip("Time:   "))), map(int, re.findall("\d+", arr[1].strip("Distance: ")))))
 
-    arr = list(map(lambda x: re.sub(r'[\D]', '', x), arr))
-
-    total = 0
-    for string in arr:
-        total += int(string[0]+string[-1])     
-
+    total = 1
+    for race in races:
+        t, d = race
+        roots = np.roots([-1, t, -d])
+        ways2win = ceil(roots[0])-(ceil(roots[1]) if not roots[1].is_integer() else int(roots[1])+1)
+        total *= ways2win
     print(total)
-
 
 
 
 
 
 def part2():
-    with open("test2.txt") as file_in:
+    with open("in.txt") as file_in:
         arr = file_in.read().splitlines()
+    race = (int(re.sub(" ", "", arr[0].strip("Time:   "))), int(re.sub(" ", "", arr[1].strip("Distance: "))))
 
-    print(arr)
-    arr = list(map(lambda x: re.sub(r'[\D]', '', x), arr))
+    t, d = race
+    roots = np.roots([-1, t, -d])
+    ways2win = ceil(roots[0])-(ceil(roots[1]) if not roots[1].is_integer() else int(roots[1])+1)
 
-    total = 0
-    for string in arr:
-        total += int(string[0]+string[-1])     
-    print(total)
+    print(ways2win)
 
-part1()
-#part2()
+# part1()
+part2()
     
